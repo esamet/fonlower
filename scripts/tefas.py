@@ -116,9 +116,32 @@ def search(text: str, kinds=FUND_KINDS, on_date: str | None = None, limit: int =
     return results[:limit]
 
 
-def sync_one(code: str, kind: str, days: int):
-    end = datetime.now()
-    start = end - timedelta(days=days)
+def full_directory(kinds=("YAT", "EMK", "BYF"), on_date: str | None = None):
+    """Verilen fon tiplerindeki TUM fonlarin guncel listesini ceker.
+
+    Uygulamanin fon arama ozelligi icin kullanilan, periyodik olarak
+    tazelenen bir katalog uretmek amaclidir. Her tip icin tek istek yeterlidir
+    (TEFAS'ta tip basina ~30-2500 fon var, bitSira=100000 sinirinin altinda).
+    """
+    date_str = on_date or datetime.now().strftime("%Y%m%d")
+    out = []
+    for kind in kinds:
+        body = _base_body(fonTipi=kind, basTarih=date_str, bitTarih=date_str)
+        data = _post(body)
+        if data.get("errorMessage") and not _is_empty_marker(data):
+            raise RuntimeError(f"{kind}: TEFAS hatasi: {data['errorMessage']}")
+        for row in data.get("resultList") or []:
+            out.append({"code": row["fonKodu"], "name": row["fonUnvan"], "kind": kind})
+        time.sleep(REQUEST_INTERVAL_SEC)
+    return out
+
+
+# TEFAS tek istekte en fazla ~1 ay (30 gun) veri dondurur; daha uzun araliklar
+# bu boyutta parcalara bolunup ardisik isteklerle cekilir.
+MAX_DAYS_PER_REQUEST = 28
+
+
+def _fetch_chunk(code: str, kind: str, start: datetime, end: datetime):
     body = _base_body(
         fonTipi=kind,
         fonKodu=code,
@@ -140,7 +163,30 @@ def sync_one(code: str, kind: str, days: int):
                 "fund_name": row.get("fonUnvan"),
             }
         )
-    rows.sort(key=lambda r: r["date"])
+    return rows
+
+
+def sync_one(code: str, kind: str, days: int):
+    end = datetime.now()
+    start = end - timedelta(days=days)
+
+    chunks = []
+    cur = start
+    while cur <= end:
+        chunk_end = min(cur + timedelta(days=MAX_DAYS_PER_REQUEST - 1), end)
+        chunks.append((cur, chunk_end))
+        cur = chunk_end + timedelta(days=1)
+
+    rows = []
+    for i, (chunk_start, chunk_end) in enumerate(chunks):
+        rows.extend(_fetch_chunk(code, kind, chunk_start, chunk_end))
+        if i < len(chunks) - 1:
+            time.sleep(REQUEST_INTERVAL_SEC)
+
+    seen = {}
+    for r in rows:
+        seen[r["date"]] = r
+    rows = sorted(seen.values(), key=lambda r: r["date"])
     return rows
 
 
@@ -168,6 +214,9 @@ def main():
     p_search.add_argument("text", help="Fon adi veya kodu icinde aranacak metin")
     p_search.add_argument("--limit", type=int, default=20)
 
+    p_dir = sub.add_parser("directory", help="Tum fon katalogunu cek (YAT/EMK/BYF)")
+    p_dir.add_argument("--kinds", default="YAT,EMK,BYF")
+
     p_sync = sub.add_parser("sync", help="Izleme listesindeki fonlarin son N gununu cek")
     p_sync.add_argument(
         "--watchlist",
@@ -181,6 +230,10 @@ def main():
 
     if args.command == "search":
         result = search(args.text, limit=args.limit)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+    elif args.command == "directory":
+        kinds = tuple(k.strip() for k in args.kinds.split(","))
+        result = full_directory(kinds)
         print(json.dumps(result, ensure_ascii=False, indent=2))
     elif args.command == "sync":
         raw = sys.stdin.read() if args.watchlist == "-" else open(args.watchlist, encoding="utf-8").read()

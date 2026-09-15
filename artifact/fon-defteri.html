@@ -1,0 +1,1117 @@
+<title>Fon Defteri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface-2: #efece3;
+    --text: #1c1f1d;
+    --text-muted: #5b665f;
+    --border: #ddd9cb;
+    --accent: #146356;
+    --accent-ink: #ffffff;
+    --accent-soft: #e3efec;
+    --positive: #1e7f52;
+    --negative: #c1440e;
+    --shadow: 0 1px 2px rgba(28,31,29,0.04), 0 8px 24px -12px rgba(28,31,29,0.18);
+    --radius: 14px;
+    --font-display: "Fraunces", ui-serif, Georgia, serif;
+    --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12181a;
+      --surface: #1b2225;
+      --surface-2: #202a2d;
+      --text: #edefea;
+      --text-muted: #93a19b;
+      --border: #2c3538;
+      --accent: #4fd8b8;
+      --accent-ink: #0b201b;
+      --accent-soft: #1c3a34;
+      --positive: #3ea873;
+      --negative: #cc6a38;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12181a;
+    --surface: #1b2225;
+    --surface-2: #202a2d;
+    --text: #edefea;
+    --text-muted: #93a19b;
+    --border: #2c3538;
+    --accent: #4fd8b8;
+    --accent-ink: #0b201b;
+    --accent-soft: #1c3a34;
+    --positive: #3ea873;
+    --negative: #cc6a38;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.6);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent-soft); }
+
+  .app {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 20px 16px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  header.top {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .brand h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .brand .tag {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .search-wrap { position: relative; }
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 11px 14px;
+    box-shadow: var(--shadow);
+  }
+  .search-box svg { flex: none; color: var(--text-muted); }
+  .search-box input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 15px;
+    min-width: 0;
+  }
+  .search-box input::placeholder { color: var(--text-muted); }
+
+  .search-results {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    max-height: 340px;
+    overflow-y: auto;
+    padding: 6px;
+  }
+  .search-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .search-row:hover { background: var(--surface-2); }
+  .search-row .code {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    font-weight: 500;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 6px;
+    flex: none;
+  }
+  .search-row .name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13.5px;
+  }
+  .search-row .kind {
+    flex: none;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .search-empty {
+    padding: 14px 10px;
+    color: var(--text-muted);
+    font-size: 13.5px;
+  }
+
+  main.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 760px) {
+    main.layout { grid-template-columns: 1fr; }
+    main.layout.has-detail .list-pane { display: none; }
+    main.layout.has-detail .detail-pane { display: block; }
+  }
+
+  .list-pane {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .list-pane .pane-title {
+    padding: 14px 16px 8px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  ul.fund-list { list-style: none; margin: 0; padding: 0 6px 6px; }
+  .fund-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .fund-row:hover { background: var(--surface-2); }
+  .fund-row.active { background: var(--accent-soft); border-color: var(--accent); }
+  .fund-row .identity { flex: 1; min-width: 0; }
+  .fund-row .code {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .fund-row .name {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .spark { flex: none; display: block; }
+  .fund-row .quote { flex: none; text-align: right; }
+  .fund-row .price {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-variant-numeric: tabular-nums;
+    padding: 1px 6px;
+    border-radius: 999px;
+    margin-top: 2px;
+  }
+  .chip.pos { color: var(--positive); background: color-mix(in oklab, var(--positive) 14%, transparent); }
+  .chip.neg { color: var(--negative); background: color-mix(in oklab, var(--negative) 14%, transparent); }
+  .chip.flat { color: var(--text-muted); background: var(--surface-2); }
+
+  .empty-list {
+    padding: 26px 18px 30px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13.5px;
+  }
+
+  .detail-pane {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 18px 18px 22px;
+    min-height: 320px;
+  }
+  @media (max-width: 760px) { .detail-pane { display: none; } }
+  main.layout.has-detail .detail-pane { display: block; }
+
+  .detail-placeholder {
+    height: 100%;
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13.5px;
+    padding: 30px;
+  }
+
+  .back-btn {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: var(--accent);
+    font: inherit;
+    font-size: 13px;
+    padding: 4px 0 12px;
+    cursor: pointer;
+  }
+  @media (max-width: 760px) { .back-btn { display: inline-flex; } }
+
+  .detail-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .detail-head h2 {
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 600;
+    margin: 0 0 2px;
+    text-wrap: balance;
+  }
+  .detail-head .meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 12.5px;
+  }
+  .detail-head .meta .code {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 1px 6px;
+    border-radius: 6px;
+  }
+  .remove-btn {
+    flex: none;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 8px;
+    padding: 7px 11px;
+    font: inherit;
+    font-size: 12.5px;
+    cursor: pointer;
+  }
+  .remove-btn:hover { color: var(--negative); border-color: var(--negative); }
+
+  .quote-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin: 14px 0 6px;
+    flex-wrap: wrap;
+  }
+  .quote-row .big-price {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 30px;
+    font-weight: 500;
+  }
+
+  .range-bar {
+    display: flex;
+    gap: 6px;
+    margin: 12px 0 8px;
+    flex-wrap: wrap;
+  }
+  .range-btn {
+    font: inherit;
+    font-size: 12.5px;
+    font-family: var(--font-mono);
+    background: var(--surface-2);
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .range-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+
+  .chart-wrap { position: relative; margin-top: 4px; }
+  .chart-wrap svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .hover-tip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--text);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    padding: 5px 8px;
+    border-radius: 8px;
+    transform: translate(-50%, -115%);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.1s;
+    z-index: 5;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+  .stat {
+    background: var(--surface);
+    padding: 10px 12px;
+  }
+  .stat .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat .value { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 14.5px; margin-top: 3px; }
+
+  section.commentary {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  section.commentary h3, section.qa h3 {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  .commentary-card {
+    background: var(--accent-soft);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+  .commentary-card .date {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .commentary-empty {
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .commentary-history {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .commentary-history details {
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+  .commentary-history summary { cursor: pointer; }
+  .commentary-history .old-entry { padding: 6px 2px 2px 14px; }
+  .commentary-history .old-entry .date { font-family: var(--font-mono); color: var(--text-muted); }
+
+  section.qa {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .qa-form { display: flex; gap: 8px; }
+  .qa-form textarea {
+    flex: 1;
+    resize: vertical;
+    min-height: 44px;
+    max-height: 140px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font: inherit;
+    font-size: 13.5px;
+    background: var(--bg);
+    color: var(--text);
+  }
+  .qa-form button {
+    flex: none;
+    background: var(--accent);
+    color: var(--accent-ink);
+    border: none;
+    border-radius: 10px;
+    padding: 0 16px;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .qa-form button:disabled { opacity: 0.5; cursor: default; }
+  .qa-answer {
+    margin-top: 12px;
+    background: var(--surface-2);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  .qa-hint { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    background: var(--text);
+    color: var(--bg);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    z-index: 50;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+  a { color: var(--accent); }
+  button { font-family: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <h1>Fon Defteri</h1>
+      <span class="tag" id="fundCount"></span>
+    </div>
+    <div class="search-wrap">
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5.2" stroke="currentColor" stroke-width="1.4"/><path d="M11 11L14.2 14.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <input id="searchInput" type="text" placeholder="Fon adı veya kodu ara (ör. Altın, Amerika, AFA)" autocomplete="off">
+      </div>
+      <div class="search-results" id="searchResults" hidden></div>
+    </div>
+  </header>
+
+  <main class="layout" id="layout">
+    <div class="list-pane">
+      <div class="pane-title">İzleme Listem</div>
+      <ul class="fund-list" id="fundList"></ul>
+    </div>
+    <div class="detail-pane" id="detailPane">
+      <button class="back-btn" id="backBtn">← Listeye dön</button>
+      <div class="detail-placeholder" id="detailPlaceholder">Bir fon seçtiğinde grafik, getiri ve yorumlar burada görünecek.</div>
+      <div id="detailBody" hidden></div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var MAX_HISTORY = 1500;
+  var DIRECTORY_KINDS = ["YAT", "EMK", "BYF"];
+
+  var state = {
+    db: null,
+    sample: null,
+    directory: [],
+    directoryLoaded: false,
+    funds: [],
+    selectedCode: null,
+    unsubFunds: null,
+  };
+
+  var els = {
+    searchInput: document.getElementById("searchInput"),
+    searchResults: document.getElementById("searchResults"),
+    fundList: document.getElementById("fundList"),
+    fundCount: document.getElementById("fundCount"),
+    layout: document.getElementById("layout"),
+    detailPane: document.getElementById("detailPane"),
+    detailPlaceholder: document.getElementById("detailPlaceholder"),
+    detailBody: document.getElementById("detailBody"),
+    backBtn: document.getElementById("backBtn"),
+    toast: document.getElementById("toast"),
+  };
+
+  function trLower(s) {
+    return (s || "").replace(/İ/g, "i").replace(/I/g, "ı").toLocaleLowerCase("tr-TR");
+  }
+
+  function showToast(msg) {
+    els.toast.textContent = msg;
+    els.toast.classList.add("show");
+    setTimeout(function () { els.toast.classList.remove("show"); }, 2600);
+  }
+
+  function todayISO() {
+    var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return "—";
+    var d = new Date(iso + "T00:00:00");
+    return d.toLocaleDateString("tr-TR", { day: "2-digit", month: "short", year: "numeric" });
+  }
+
+  function fmtPrice(p) {
+    if (p === null || p === undefined) return "—";
+    return "₺" + p.toLocaleString("tr-TR", { minimumFractionDigits: 4, maximumFractionDigits: 6 });
+  }
+
+  function fmtBigTRY(n) {
+    if (n === null || n === undefined) return "—";
+    if (n >= 1e9) return (n / 1e9).toLocaleString("tr-TR", { maximumFractionDigits: 2 }) + " Milyar ₺";
+    if (n >= 1e6) return (n / 1e6).toLocaleString("tr-TR", { maximumFractionDigits: 1 }) + " Milyon ₺";
+    return n.toLocaleString("tr-TR") + " ₺";
+  }
+
+  function fmtPct(p, opts) {
+    opts = opts || {};
+    if (p === null || p === undefined || !isFinite(p)) return "—";
+    var sign = p > 0.0001 ? "+" : (p < -0.0001 ? "" : "±");
+    return sign + p.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "%";
+  }
+
+  function pctClass(p) {
+    if (p === null || p === undefined || !isFinite(p) || Math.abs(p) < 0.0001) return "flat";
+    return p > 0 ? "pos" : "neg";
+  }
+
+  function chipArrow(p) {
+    if (p === null || p === undefined || !isFinite(p) || Math.abs(p) < 0.0001) return "";
+    return p > 0 ? "▲" : "▼";
+  }
+
+  // ---------- Kapasite ----------
+
+  function initCapabilities() {
+    if (!window.claude || !window.claude.use) {
+      els.detailPlaceholder.textContent = "Bu sayfa yalnızca claude.ai içinde, gerekli izinlerle çalışır.";
+      return;
+    }
+    window.claude.use("db").then(function (db) {
+      state.db = db;
+      if (!db) {
+        els.detailPlaceholder.textContent = "Veritabanı erişimi bu görünümde etkin değil.";
+        return;
+      }
+      loadDirectory();
+      subscribeFunds();
+    });
+    window.claude.use("sample").then(function (sample) {
+      state.sample = sample;
+    });
+  }
+
+  // ---------- Fon kataloğu (arama) ----------
+
+  function loadDirectory() {
+    var gets = DIRECTORY_KINDS.map(function (k) {
+      return state.db.doc("directory/" + k).get().then(function (snap) {
+        if (!snap.exists) return [];
+        var d = snap.data();
+        return (d && d.funds) || [];
+      }).catch(function () { return []; });
+    });
+    Promise.all(gets).then(function (lists) {
+      state.directory = [].concat.apply([], lists);
+      state.directoryLoaded = true;
+    });
+  }
+
+  function runSearch(text) {
+    var q = trLower(text.trim());
+    if (!q) {
+      els.searchResults.hidden = true;
+      return;
+    }
+    if (!state.directoryLoaded) {
+      els.searchResults.hidden = false;
+      els.searchResults.innerHTML = '<div class="search-empty">Fon kataloğu yükleniyor…</div>';
+      return;
+    }
+    var trackedCodes = {};
+    state.funds.forEach(function (f) { trackedCodes[f.code] = true; });
+
+    var matches = state.directory.filter(function (f) {
+      return trLower(f.code).indexOf(q) !== -1 || trLower(f.name).indexOf(q) !== -1;
+    }).slice(0, 30);
+
+    els.searchResults.hidden = false;
+    if (!matches.length) {
+      els.searchResults.innerHTML = '<div class="search-empty">"' + escapeHtml(text) + '" için sonuç bulunamadı.</div>';
+      return;
+    }
+    els.searchResults.innerHTML = "";
+    matches.forEach(function (f) {
+      var row = document.createElement("div");
+      row.className = "search-row";
+      var already = !!trackedCodes[f.code];
+      row.innerHTML =
+        '<span class="code">' + escapeHtml(f.code) + '</span>' +
+        '<span class="name">' + escapeHtml(f.name) + '</span>' +
+        '<span class="kind">' + (already ? "izleniyor ✓" : kindLabel(f.kind)) + '</span>';
+      if (!already) {
+        row.tabIndex = 0;
+        row.setAttribute("role", "button");
+        row.addEventListener("click", function () { addFund(f); });
+        row.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); addFund(f); }
+        });
+      } else {
+        row.style.opacity = "0.55";
+        row.style.cursor = "default";
+      }
+      els.searchResults.appendChild(row);
+    });
+  }
+
+  function kindLabel(k) {
+    return { YAT: "Yatırım", EMK: "Emeklilik", BYF: "Borsa Yat.", GYF: "Gayrimenkul", GSYF: "Girişim Sm." }[k] || k;
+  }
+
+  function addFund(f) {
+    if (!state.db) return;
+    state.db.doc("funds/" + f.code).set({
+      code: f.code,
+      name: f.name,
+      kind: f.kind,
+      addedDate: todayISO(),
+      history: [],
+      commentary: [],
+    }).then(function () {
+      showToast(f.code + " izleme listesine eklendi. İlk veri günlük senkronizasyondan sonra gelecek.");
+      els.searchInput.value = "";
+      els.searchResults.hidden = true;
+      selectFund(f.code);
+    }).catch(function (e) {
+      showToast("Eklenemedi: " + (e && e.message ? e.message : "bilinmeyen hata"));
+    });
+  }
+
+  function removeFund(code) {
+    if (!state.db) return;
+    state.db.doc("funds/" + code).delete().then(function () {
+      showToast(code + " izleme listesinden çıkarıldı.");
+      if (state.selectedCode === code) {
+        state.selectedCode = null;
+        els.layout.classList.remove("has-detail");
+        renderDetail();
+      }
+    });
+  }
+
+  function escapeHtml(s) {
+    var d = document.createElement("div");
+    d.textContent = s == null ? "" : String(s);
+    return d.innerHTML;
+  }
+
+  // ---------- İzleme listesi ----------
+
+  function subscribeFunds() {
+    state.unsubFunds = state.db.collection("funds").onSnapshot(function (snap) {
+      var list = [];
+      snap.docs.forEach(function (doc) {
+        var d = doc.data();
+        if (d) list.push(d);
+      });
+      list.sort(function (a, b) { return (a.code || "").localeCompare(b.code || "", "tr"); });
+      state.funds = list;
+      renderList();
+      renderDetail();
+    }, function (err) {
+      els.fundList.innerHTML = '<div class="empty-list">Veri okunamadı: ' + escapeHtml(err.message) + '</div>';
+    });
+  }
+
+  function sortedHistory(f) {
+    return (f.history || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+  }
+
+  function dailyChangePct(f) {
+    var h = sortedHistory(f);
+    if (h.length < 2) return null;
+    var last = h[h.length - 1], prev = h[h.length - 2];
+    if (!prev.price) return null;
+    return ((last.price - prev.price) / prev.price) * 100;
+  }
+
+  function sparkPoints(f, w, h) {
+    var hist = sortedHistory(f).slice(-30);
+    if (hist.length < 2) return null;
+    var prices = hist.map(function (d) { return d.price; });
+    var min = Math.min.apply(null, prices), max = Math.max.apply(null, prices);
+    var range = max - min || 1;
+    var pts = prices.map(function (p, i) {
+      var x = (i / (prices.length - 1)) * w;
+      var y = h - ((p - min) / range) * h;
+      return x.toFixed(1) + "," + y.toFixed(1);
+    });
+    return pts.join(" ");
+  }
+
+  function renderList() {
+    els.fundCount.textContent = state.funds.length ? state.funds.length + " fon" : "";
+    if (!state.funds.length) {
+      els.fundList.innerHTML = '<div class="empty-list">Henüz fon eklemedin.<br>Yukarıdan bir fon adı veya kodu ara ve izleme listene ekle.</div>';
+      return;
+    }
+    els.fundList.innerHTML = "";
+    state.funds.forEach(function (f) {
+      var hist = sortedHistory(f);
+      var last = hist.length ? hist[hist.length - 1] : null;
+      var chg = dailyChangePct(f);
+      var row = document.createElement("li");
+      row.className = "fund-row" + (state.selectedCode === f.code ? " active" : "");
+      row.tabIndex = 0;
+      row.setAttribute("role", "button");
+      var spark = sparkPoints(f, 56, 22);
+      var sparkSvg = spark
+        ? '<svg class="spark" width="56" height="22" viewBox="0 0 56 22"><polyline points="' + spark + '" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        : '<svg class="spark" width="56" height="22" viewBox="0 0 56 22"></svg>';
+      row.innerHTML =
+        '<div class="identity"><div class="code">' + escapeHtml(f.code) + '</div><div class="name">' + escapeHtml(f.name) + '</div></div>' +
+        sparkSvg +
+        '<div class="quote">' +
+          (last ? '<div class="price">' + fmtPrice(last.price) + '</div>' : '<div class="price" style="color:var(--text-muted)">bekleniyor</div>') +
+          (chg !== null ? '<div class="chip ' + pctClass(chg) + '">' + chipArrow(chg) + ' ' + fmtPct(chg) + '</div>' : '') +
+        '</div>';
+      row.addEventListener("click", function () { selectFund(f.code); });
+      row.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectFund(f.code); }
+      });
+      els.fundList.appendChild(row);
+    });
+  }
+
+  function selectFund(code) {
+    state.selectedCode = code;
+    els.layout.classList.add("has-detail");
+    renderList();
+    renderDetail();
+  }
+
+  els.backBtn.addEventListener("click", function () {
+    els.layout.classList.remove("has-detail");
+  });
+
+  // ---------- Detay paneli ----------
+
+  var currentRangeDays = 90;
+  var qaState = { asking: false };
+
+  function rangeCutoffDate(days) {
+    if (days === Infinity) return null;
+    var d = new Date();
+    d.setDate(d.getDate() - days);
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  function renderDetail() {
+    var f = state.funds.find(function (x) { return x.code === state.selectedCode; });
+    if (!f) {
+      els.detailPlaceholder.hidden = false;
+      els.detailBody.hidden = true;
+      return;
+    }
+    els.detailPlaceholder.hidden = true;
+    els.detailBody.hidden = false;
+
+    var hist = sortedHistory(f);
+    var commentary = (f.commentary || []).slice().sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+
+    var html = "";
+    html += '<div class="detail-head">' +
+      '<div><h2>' + escapeHtml(f.name) + '</h2>' +
+      '<div class="meta"><span class="code">' + escapeHtml(f.code) + '</span><span>' + kindLabel(f.kind) + '</span>' +
+      (f.addedDate ? '<span>· ' + fmtDate(f.addedDate) + ' tarihinden beri izleniyor</span>' : '') + '</div></div>' +
+      '<button class="remove-btn" id="rmBtn">İzlemeyi bırak</button>' +
+      '</div>';
+
+    if (!hist.length) {
+      html += '<div class="detail-placeholder" style="padding:36px 8px;">Bu fon için henüz veri yok. Günlük senkronizasyon çalıştığında burada fiyat geçmişi ve grafik görünecek.</div>';
+      els.detailBody.innerHTML = html;
+      document.getElementById("rmBtn").addEventListener("click", function () { removeFund(f.code); });
+      return;
+    }
+
+    var last = hist[hist.length - 1];
+    var chg = dailyChangePct(f);
+
+    html += '<div class="quote-row"><span class="big-price">' + fmtPrice(last.price) + '</span>' +
+      (chg !== null ? '<span class="chip ' + pctClass(chg) + '">' + chipArrow(chg) + ' ' + fmtPct(chg) + ' (bugün)</span>' : '') +
+      '</div>';
+
+    html += '<div class="range-bar" id="rangeBar">' +
+      rangeBtn(7, "1H") + rangeBtn(30, "1A") + rangeBtn(90, "3A") + rangeBtn(365, "1Y") + rangeBtn(Infinity, "Tümü") +
+      '</div>';
+
+    html += '<div class="chart-wrap" id="chartWrap"></div>';
+    html += '<div class="stats-grid" id="statsGrid"></div>';
+
+    html += '<section class="commentary"><h3>Günlük Yorum</h3><div id="commentaryBox"></div></section>';
+
+    if (state.sample) {
+      html += '<section class="qa"><h3>Bu fon hakkında sor</h3>' +
+        '<div class="qa-form"><textarea id="qaInput" placeholder="Örn: Son 1 ayda neden düştü? Volatilitesi nasıl?"></textarea>' +
+        '<button id="qaBtn">Sor</button></div>' +
+        '<div class="qa-hint">Cevap, bu fonun kayıtlı geçmiş verisine bakılarak Claude tarafından üretilir; yatırım tavsiyesi değildir.</div>' +
+        '<div id="qaAnswer" hidden></div>' +
+        '</section>';
+    }
+
+    els.detailBody.innerHTML = html;
+    document.getElementById("rmBtn").addEventListener("click", function () { removeFund(f.code); });
+
+    Array.prototype.forEach.call(document.querySelectorAll("#rangeBar .range-btn"), function (btn) {
+      btn.addEventListener("click", function () {
+        currentRangeDays = btn.dataset.days === "inf" ? Infinity : Number(btn.dataset.days);
+        renderChartAndStats(f, hist);
+        Array.prototype.forEach.call(document.querySelectorAll("#rangeBar .range-btn"), function (b) { b.classList.remove("active"); });
+        btn.classList.add("active");
+      });
+    });
+
+    renderChartAndStats(f, hist);
+    renderCommentary(commentary);
+
+    if (state.sample) {
+      var qaBtn = document.getElementById("qaBtn");
+      var qaInput = document.getElementById("qaInput");
+      qaBtn.addEventListener("click", function () { askQuestion(f, hist, commentary, qaInput.value); });
+      qaInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { askQuestion(f, hist, commentary, qaInput.value); }
+      });
+    }
+  }
+
+  function rangeBtn(days, label) {
+    var active = currentRangeDays === days ? " active" : "";
+    return '<button class="range-btn' + active + '" data-days="' + (days === Infinity ? "inf" : days) + '">' + label + '</button>';
+  }
+
+  function renderCommentary(commentary) {
+    var box = document.getElementById("commentaryBox");
+    if (!box) return;
+    if (!commentary.length) {
+      box.innerHTML = '<div class="commentary-empty">Henüz otomatik yorum üretilmedi. İlk yorum, günlük senkronizasyondan sonra burada görünecek.</div>';
+      return;
+    }
+    var latest = commentary[0];
+    var older = commentary.slice(1, 8);
+    var html = '<div class="commentary-card"><span class="date">' + fmtDate(latest.date) + '</span>' + escapeHtml(latest.text) + '</div>';
+    if (older.length) {
+      html += '<div class="commentary-history"><details><summary>Önceki yorumlar (' + older.length + ')</summary>';
+      older.forEach(function (c) {
+        html += '<div class="old-entry"><span class="date">' + fmtDate(c.date) + '</span> — ' + escapeHtml(c.text) + '</div>';
+      });
+      html += '</details></div>';
+    }
+    box.innerHTML = html;
+  }
+
+  // ---------- Grafik ----------
+
+  function renderChartAndStats(f, hist) {
+    var cutoff = rangeCutoffDate(currentRangeDays);
+    var visible = cutoff ? hist.filter(function (d) { return d.date >= cutoff; }) : hist;
+    if (visible.length < 2) visible = hist.slice(-2);
+    drawChart(visible);
+    drawStats(visible, f);
+  }
+
+  function drawStats(visible, f) {
+    var grid = document.getElementById("statsGrid");
+    if (!grid) return;
+    var first = visible[0], last = visible[visible.length - 1];
+    var periodPct = first.price ? ((last.price - first.price) / first.price) * 100 : null;
+    var prices = visible.map(function (d) { return d.price; });
+    var hi = Math.max.apply(null, prices), lo = Math.min.apply(null, prices);
+
+    var rets = [];
+    for (var i = 1; i < visible.length; i++) {
+      if (visible[i - 1].price) rets.push((visible[i].price - visible[i - 1].price) / visible[i - 1].price);
+    }
+    var mean = rets.reduce(function (a, b) { return a + b; }, 0) / (rets.length || 1);
+    var variance = rets.reduce(function (a, b) { return a + Math.pow(b - mean, 2); }, 0) / (rets.length || 1);
+    var dailyVolPct = Math.sqrt(variance) * 100;
+
+    grid.innerHTML =
+      stat("Dönem Getirisi", '<span class="chip ' + pctClass(periodPct) + '" style="font-size:14.5px">' + fmtPct(periodPct) + '</span>') +
+      stat("Dönem Yüksek", fmtPrice(hi)) +
+      stat("Dönem Düşük", fmtPrice(lo)) +
+      stat("Gün. Volatilite", (isFinite(dailyVolPct) ? dailyVolPct.toLocaleString("tr-TR", { maximumFractionDigits: 2 }) + "%" : "—")) +
+      stat("Yatırımcı Sayısı", f.history.length ? Number(visible[visible.length - 1].investors || 0).toLocaleString("tr-TR") : "—") +
+      stat("Fon Büyüklüğü", fmtBigTRY(visible[visible.length - 1].size));
+  }
+
+  function stat(label, valueHtml) {
+    return '<div class="stat"><div class="label">' + label + '</div><div class="value">' + valueHtml + '</div></div>';
+  }
+
+  function drawChart(visible) {
+    var wrap = document.getElementById("chartWrap");
+    if (!wrap) return;
+    var W = 640, H = 220, PAD_L = 4, PAD_R = 4, PAD_T = 14, PAD_B = 22;
+    var prices = visible.map(function (d) { return d.price; });
+    var min = Math.min.apply(null, prices), max = Math.max.apply(null, prices);
+    if (min === max) { min -= 1; max += 1; }
+    var innerW = W - PAD_L - PAD_R, innerH = H - PAD_T - PAD_B;
+
+    function xAt(i) { return PAD_L + (i / (visible.length - 1)) * innerW; }
+    function yAt(p) { return PAD_T + innerH - ((p - min) / (max - min)) * innerH; }
+
+    var linePts = visible.map(function (d, i) { return xAt(i).toFixed(1) + "," + yAt(d.price).toFixed(1); }).join(" ");
+    var areaPts = linePts + " " + xAt(visible.length - 1).toFixed(1) + "," + (PAD_T + innerH) + " " + xAt(0).toFixed(1) + "," + (PAD_T + innerH);
+
+    var gridLines = "";
+    for (var g = 0; g <= 3; g++) {
+      var gy = PAD_T + (innerH / 3) * g;
+      gridLines += '<line x1="' + PAD_L + '" y1="' + gy.toFixed(1) + '" x2="' + (W - PAD_R) + '" y2="' + gy.toFixed(1) + '" stroke="var(--border)" stroke-width="1"/>';
+    }
+
+    var firstDate = fmtDate(visible[0].date), lastDate = fmtDate(visible[visible.length - 1].date);
+
+    var svg =
+      '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="Fiyat grafiği">' +
+      '<defs><linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="var(--accent)" stop-opacity="0.28"/>' +
+      '<stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>' +
+      gridLines +
+      '<polygon points="' + areaPts + '" fill="url(#areaGrad)"/>' +
+      '<polyline points="' + linePts + '" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<circle id="hoverDot" cx="0" cy="0" r="3.5" fill="var(--accent)" stroke="var(--surface)" stroke-width="1.5" style="opacity:0"/>' +
+      '<line id="hoverLine" x1="0" y1="' + PAD_T + '" x2="0" y2="' + (PAD_T + innerH) + '" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="3,3" style="opacity:0"/>' +
+      '<text x="' + PAD_L + '" y="' + (H - 4) + '" font-size="10.5" fill="var(--text-muted)" font-family="var(--font-mono)">' + firstDate + '</text>' +
+      '<text x="' + (W - PAD_R) + '" y="' + (H - 4) + '" font-size="10.5" fill="var(--text-muted)" font-family="var(--font-mono)" text-anchor="end">' + lastDate + '</text>' +
+      '</svg>' +
+      '<div class="hover-tip" id="hoverTip"></div>';
+
+    wrap.innerHTML = svg;
+
+    var svgEl = wrap.querySelector("svg");
+    var hoverDot = wrap.querySelector("#hoverDot");
+    var hoverLine = wrap.querySelector("#hoverLine");
+    var hoverTip = wrap.querySelector("#hoverTip");
+
+    function handleMove(clientX) {
+      var rect = svgEl.getBoundingClientRect();
+      var relX = ((clientX - rect.left) / rect.width) * W;
+      var idx = Math.round(((relX - PAD_L) / innerW) * (visible.length - 1));
+      idx = Math.max(0, Math.min(visible.length - 1, idx));
+      var d = visible[idx];
+      var px = xAt(idx), py = yAt(d.price);
+      hoverDot.setAttribute("cx", px); hoverDot.setAttribute("cy", py); hoverDot.style.opacity = "1";
+      hoverLine.setAttribute("x1", px); hoverLine.setAttribute("x2", px); hoverLine.style.opacity = "1";
+      var pctRect = (px / W) * 100;
+      hoverTip.style.left = pctRect + "%";
+      hoverTip.style.top = ((py / H) * 100) + "%";
+      hoverTip.style.opacity = "1";
+      hoverTip.textContent = fmtDate(d.date) + "  " + fmtPrice(d.price);
+    }
+    function handleLeave() {
+      hoverDot.style.opacity = "0"; hoverLine.style.opacity = "0"; hoverTip.style.opacity = "0";
+    }
+    svgEl.addEventListener("mousemove", function (e) { handleMove(e.clientX); });
+    svgEl.addEventListener("mouseleave", handleLeave);
+    svgEl.addEventListener("touchstart", function (e) { handleMove(e.touches[0].clientX); }, { passive: true });
+    svgEl.addEventListener("touchmove", function (e) { handleMove(e.touches[0].clientX); }, { passive: true });
+    svgEl.addEventListener("touchend", handleLeave);
+  }
+
+  // ---------- Soru-cevap ----------
+
+  function askQuestion(f, hist, commentary, question) {
+    question = (question || "").trim();
+    if (!question || !state.sample || qaState.asking) return;
+    qaState.asking = true;
+    var btn = document.getElementById("qaBtn");
+    var answerBox = document.getElementById("qaAnswer");
+    btn.disabled = true;
+    btn.textContent = "Düşünüyor…";
+    answerBox.hidden = false;
+    answerBox.className = "qa-answer";
+    answerBox.textContent = "…";
+
+    var recent = hist.slice(-90).map(function (d) { return d.date + ": " + d.price; }).join("\n");
+    var recentCommentary = commentary.slice(0, 5).map(function (c) { return c.date + " — " + c.text; }).join("\n");
+
+    var prompt = "Sen bir Türk yatırım fonu (TEFAS) veri asistanısın. Aşağıdaki fon için kullanıcının sorusunu, " +
+      "SADECE verilen geçmiş veriye dayanarak, kısa ve net bir şekilde Türkçe yanıtla. Yatırım tavsiyesi verme, " +
+      "sadece veriye dayalı gözlem sun; gerekirse 'bu bir yatırım tavsiyesi değildir' notu ekle.\n\n" +
+      "Fon: " + f.name + " (" + f.code + ", " + f.kind + ")\n\n" +
+      "Son fiyat geçmişi (tarih: fiyat):\n" + recent + "\n\n" +
+      (recentCommentary ? "Önceki otomatik günlük yorumlar:\n" + recentCommentary + "\n\n" : "") +
+      "Kullanıcının sorusu: " + question;
+
+    state.sample(prompt, {
+      onText: function (evt) { answerBox.textContent = evt.text; },
+    }).then(function (res) {
+      answerBox.textContent = res.text;
+    }).catch(function (e) {
+      answerBox.textContent = "Cevap alınamadı: " + (e && e.message ? e.message : "bilinmeyen hata");
+    }).finally(function () {
+      qaState.asking = false;
+      btn.disabled = false;
+      btn.textContent = "Sor";
+    });
+  }
+
+  // ---------- Arama olayları ----------
+
+  var searchDebounce;
+  els.searchInput.addEventListener("input", function () {
+    clearTimeout(searchDebounce);
+    var val = els.searchInput.value;
+    searchDebounce = setTimeout(function () { runSearch(val); }, 120);
+  });
+  els.searchInput.addEventListener("focus", function () {
+    if (els.searchInput.value.trim()) runSearch(els.searchInput.value);
+  });
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".search-wrap")) els.searchResults.hidden = true;
+  });
+
+  initCapabilities();
+})();
+</script>
